@@ -19,6 +19,30 @@ st.subheader("Dataset Preview")
 st.dataframe(df.head())
 
 
+# ---- Category over Region ----
+# Group by region and category
+category_region = df.groupby(["region", "category"])["revenue"].sum().reset_index()
+
+# Plot grouped bar chart
+fig, ax = plt.subplots(figsize=(12,6))
+sns.barplot(
+    x="region", y="revenue", hue="category",
+    data=category_region, ax=ax
+)
+ax.set_title("Revenue by Category across Regions")
+plt.xticks(rotation=45)
+st.pyplot(fig)
+
+# ---- Optional: Heatmap (matrix style) ----
+pivot = category_region.pivot(index="region", columns="category", values="revenue").fillna(0)
+
+fig, ax = plt.subplots(figsize=(10,6))
+sns.heatmap(pivot, annot=True, fmt=".0f", cmap="Blues", ax=ax)
+ax.set_title("Category vs Region Revenue Heatmap")
+st.pyplot(fig)
+
+
+
 
 
 # Category revenue
