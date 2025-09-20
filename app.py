@@ -19,12 +19,15 @@ st.subheader("Dataset Preview")
 st.dataframe(df.head())
 
 # Sales by Month
-df["month"] = df["order_date"].dt.to_period("M").astype(str)
+# Create month column as datetime (1st of each month)
+df["month"] = df["order_date"].dt.to_period("M").dt.to_timestamp()
 sales_over_time = df.groupby("month")["revenue"].sum().reset_index()
 fig, ax = plt.subplots(figsize=(10,5))
 sns.lineplot(x="month", y="revenue", data=sales_over_time, ax=ax, marker="o")
-plt.xticks(rotation=45)  # rotate labels so they don’t overlap
+ax.set_title("Monthly Revenue Trend")
+plt.xticks(rotation=45)
 st.pyplot(fig)
+
 
 # Category revenue
 st.subheader("Revenue by Category")
