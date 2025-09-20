@@ -19,10 +19,11 @@ st.subheader("Dataset Preview")
 st.dataframe(df.head())
 
 # Sales by Month
-st.subheader("Monthly Revenue")
+df["month"] = df["order_date"].dt.to_period("M").astype(str)
 sales_over_time = df.groupby("month")["revenue"].sum().reset_index()
 fig, ax = plt.subplots(figsize=(10,5))
 sns.lineplot(x="month", y="revenue", data=sales_over_time, ax=ax, marker="o")
+plt.xticks(rotation=45)  # rotate labels so they don’t overlap
 st.pyplot(fig)
 
 # Category revenue
