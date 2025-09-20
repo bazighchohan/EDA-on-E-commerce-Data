@@ -20,8 +20,26 @@ st.dataframe(df.head())
 
 # Sales by Month
 # Create month column as datetime (1st of each month)
+# Ensure order_date is datetime
+df["order_date"] = pd.to_datetime(df["order_date"], errors="coerce")
+
+# Create month column as datetime (first day of each month)
 df["month"] = df["order_date"].dt.to_period("M").dt.to_timestamp()
-sales_over_time = df.groupby("month")["revenue"].sum().reset_index()
+
+# Create a continuous 12-month range
+all_months = pd.date_range(
+    start=df["month"].min(), 
+    end=df["month"].max(), 
+    freq="MS"  # Month start
+)
+
+# Group by month and sum revenue
+sales_over_time = df.groupby("month")["revenue"].sum().reindex(all_months, fill_value=0).reset_index()
+
+# Rename for plotting
+sales_over_time.columns = ["month", "revenue"]
+
+# Plot in correct time order with 12 dots
 fig, ax = plt.subplots(figsize=(10,5))
 sns.lineplot(x="month", y="revenue", data=sales_over_time, ax=ax, marker="o")
 ax.set_title("Monthly Revenue Trend")
