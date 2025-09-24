@@ -103,9 +103,9 @@ plt.xticks(rotation=45)
 st.pyplot(fig)
 
 st.subheader("Top 10 Products by Revenue")
-top_products = df.groupby("product")["revenue"].sum().nlargest(10).reset_index()
+top_products = df.groupby("product_id")["revenue"].sum().nlargest(10).reset_index()
 fig, ax = plt.subplots(figsize=(10,6))
-sns.barplot(x="revenue", y="product", data=top_products, ax=ax)
+sns.barplot(x="revenue", y="product_id", data=top_products, ax=ax)
 st.pyplot(fig)
 
 st.subheader("Discount vs Revenue Impact")
