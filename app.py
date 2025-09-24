@@ -102,11 +102,18 @@ sns.lineplot(x="month", y="revenue", data=monthly_revenue, marker="o", ax=ax)
 plt.xticks(rotation=45)
 st.pyplot(fig)
 
-st.subheader("Top 10 Products by Revenue")
+st.subheader("🏆 Top 10 Products by Revenue")
 top_products = df.groupby("product_id")["revenue"].sum().nlargest(10).reset_index()
+
 fig, ax = plt.subplots(figsize=(10,6))
-sns.barplot(x="revenue", y="product_id", data=top_products, ax=ax)
+sns.barplot(x="product_id", y="revenue", data=top_products, ax=ax, palette="viridis")
+
+ax.set_title("Top 10 Products by Revenue")
+ax.set_xlabel("Product ID")
+ax.set_ylabel("Revenue")
+plt.xticks(rotation=45)
 st.pyplot(fig)
+
 
 st.subheader("Discount vs Revenue Impact")
 fig, ax = plt.subplots()
